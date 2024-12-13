@@ -13,3 +13,50 @@
 <br/><hr/>
 Projenin OpenAPI Swagger Dökümanı:
 http://localhost:8080/swagger-ui/index.html
+
+<hr/>
+
+## Uygulama Görüntüleri
+
+### Konsol Görüntüsü
+
+![alt text](images/console.PNG)
+
+<hr/>
+
+### Postman Görüntüleri
+#### Get Request gorev1/merhaba
+
+![alt text](images/get.PNG)
+
+#### Post Request gorev1/merhaba
+- parameter = türksat
+![alt text](images/post1.PNG)
+
+- parameter = Deneme
+![alt text](images/post2.PNG)
+
+#### HTTP Kodları
+
+- 400 Bad Request
+![alt text](images/400.PNG)
+
+- 404 Not Found
+![alt text](images/404.PNG)
+
+- 500 Internal Server Error
+![alt text](images/500.PNG)
+
+<hr/>
+
+### Swagger Görüntüleri
+#### API Description
+![alt text](images/swagger1.PNG)
+
+#### GET Endpoint
+![alt text](images/swagger-get.PNG)
+
+#### POST Endpoint
+![alt text](images/swagger-post.PNG)
+
+![alt text](images/swagger-post2.PNG)
