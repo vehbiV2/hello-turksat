@@ -1,3 +1,4 @@
+/*
 package com.vehbiozcan.hello_turksat.config;
 
 import org.springframework.context.annotation.Bean;
@@ -30,3 +31,4 @@ public class UserConfig {
         return new BCryptPasswordEncoder();
     }
 }
+*/
