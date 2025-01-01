@@ -1,5 +1,7 @@
-package com.vehbiozcan.hello_turksat.controller;
+package com.vehbiozcan.hello_turksat.controller.impl;
 
+import com.vehbiozcan.hello_turksat.controller.IHelloController;
+import com.vehbiozcan.hello_turksat.dto.DtoHello;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.bind.annotation.*;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/gorev1")
 //Route isimlendirmesi ilk görev olduğundan ve RequestMapping anotasyonunu da kullanmak adına "/gorev1" şeklinde isimlendirildi.
 
-public class HelloController {
+public class HelloControllerImpl implements IHelloController {
     //Operation Anotasyonu içerisinde Servisin tanımını yapıyoruz ve response
     @GetMapping("/merhaba")
     @Operation(
@@ -20,6 +22,7 @@ public class HelloController {
                     @ApiResponse(responseCode = "500", ref = "internalServerError"),
             }
     )
+    @Override
     public String getHello(){
         return "Merhaba Dünya!";
     }
@@ -34,8 +37,7 @@ public class HelloController {
                     @ApiResponse(responseCode = "500", ref = "internalServerError"),
             }
     )
-
-
+    @Override
     public String sayHello(@RequestParam(required = true) String parameter){
         //RequestParam(required=true) anotasyonu ile parametrenin zorunlu olduğunu gösterdik parametre gelmezse 500 yerine 400 kodu dönecek
 
@@ -44,6 +46,15 @@ public class HelloController {
             return "Merhaba TÜRKSAT!";
         }
         return "Gönderilen parametre: " + parameter.trim() ;
+    }
+
+    @PostMapping("/json-merhaba")
+    @Override
+    public String sayHello(@RequestBody DtoHello parameter){
+        if("TÜRKSAT".equalsIgnoreCase(parameter.getMessage().trim())){
+            return "Merhaba TÜRKSAT!";
+        }
+        return "Gönderilen parametre: " + parameter.getMessage().trim() ;
     }
 
 }
