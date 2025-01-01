@@ -2,6 +2,9 @@ package com.vehbiozcan.hello_turksat.controller.impl;
 
 import com.vehbiozcan.hello_turksat.controller.IHelloController;
 import com.vehbiozcan.hello_turksat.dto.DtoHello;
+import com.vehbiozcan.hello_turksat.exception.BaseException;
+import com.vehbiozcan.hello_turksat.exception.ErrorMessage;
+import com.vehbiozcan.hello_turksat.exception.MessageType;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.web.bind.annotation.*;
@@ -51,6 +54,9 @@ public class HelloControllerImpl implements IHelloController {
     @PostMapping("/json-merhaba")
     @Override
     public String sayHello(@RequestBody DtoHello parameter){
+        if (parameter == null || parameter.getMessage().isEmpty()){
+            throw new BaseException(new ErrorMessage(MessageType.BAD_REQUEST,null));
+        }
         if("TÜRKSAT".equalsIgnoreCase(parameter.getMessage().trim())){
             return "Merhaba TÜRKSAT!";
         }
