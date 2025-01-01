@@ -41,8 +41,12 @@ public class HelloControllerImpl implements IHelloController {
             }
     )
     @Override
-    public String sayHello(@RequestParam(required = true) String parameter){
+    public String sayHello(@RequestParam(required = false) String parameter){
         //RequestParam(required=true) anotasyonu ile parametrenin zorunlu olduğunu gösterdik parametre gelmezse 500 yerine 400 kodu dönecek
+
+        if (parameter == null || parameter.isEmpty()){
+            throw new BaseException(new ErrorMessage(MessageType.FIELD_REQUIRED,null));
+        }
 
         //büyük küçük harf duyarsız karşılaştırıyoruz
         if("TÜRKSAT".equalsIgnoreCase(parameter.trim())){
@@ -55,7 +59,7 @@ public class HelloControllerImpl implements IHelloController {
     @Override
     public String sayHello(@RequestBody DtoHello parameter){
         if (parameter == null || parameter.getMessage().isEmpty()){
-            throw new BaseException(new ErrorMessage(MessageType.BAD_REQUEST,null));
+            throw new BaseException(new ErrorMessage(MessageType.FIELD_REQUIRED,null));
         }
         if("TÜRKSAT".equalsIgnoreCase(parameter.getMessage().trim())){
             return "Merhaba TÜRKSAT!";

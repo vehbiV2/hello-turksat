@@ -3,6 +3,7 @@ package com.vehbiozcan.hello_turksat.handler;
 import com.vehbiozcan.hello_turksat.exception.ApiError;
 import com.vehbiozcan.hello_turksat.exception.BaseException;
 import com.vehbiozcan.hello_turksat.exception.ExceptionInfo;
+import com.vehbiozcan.hello_turksat.exception.MessageType;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,7 +19,12 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = {BaseException.class})
     public ResponseEntity<ApiError> handleBaseException(BaseException e, WebRequest request) {
-        return ResponseEntity.badRequest().body(customApiError(HttpStatus.BAD_REQUEST,request,e.getMessage()));
+        MessageType messageType = e.getMessageType();
+        return ResponseEntity.status(messageType.getStatus()).body(customApiError(
+                messageType.getStatus(),
+                request,
+                e.getMessage()
+        ));
     }
 
 
