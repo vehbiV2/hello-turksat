@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.validation.Valid;
 
 @RestController
-//@RequestMapping("/authenticate")
+@RequestMapping("api/auth")
 public class AuthControllerImpl implements IAuthController {
 
     @Autowired
@@ -33,15 +33,15 @@ public class AuthControllerImpl implements IAuthController {
 
     @PostMapping("/authenticate")
     @Override
-    public ResponseEntity<AuthResponse> authenticate(@RequestBody AuthRequest authRequest) {
+    public RootEntity<AuthResponse> authenticate(@RequestBody AuthRequest authRequest) {
         AuthResponse response = authService.authenticate(authRequest);
-        return ResponseEntity.ok(response);
+        return RootEntity.ok(response);
     }
 
     @PostMapping("/refresh-token")
     @Override
-    public ResponseEntity<AuthResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
+    public RootEntity<AuthResponse> refreshToken(@RequestBody RefreshTokenRequest refreshTokenRequest) {
         AuthResponse response = authService.refreshToken(refreshTokenRequest);
-        return ResponseEntity.ok(response);
+        return RootEntity.ok(response);
     }
 }

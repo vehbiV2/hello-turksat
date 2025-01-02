@@ -9,6 +9,6 @@ import org.springframework.http.ResponseEntity;
 
 public interface IAuthController {
     public ResponseEntity<RootEntity<DtoUser>> register(AuthRequest authRequest);
-    public ResponseEntity<AuthResponse> authenticate(AuthRequest authRequest);
-    public ResponseEntity<AuthResponse> refreshToken(RefreshTokenRequest refreshTokenRequest);
+    public RootEntity<AuthResponse> authenticate(AuthRequest authRequest);
+    public RootEntity<AuthResponse> refreshToken(RefreshTokenRequest refreshTokenRequest);
 }
