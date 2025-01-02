@@ -1,5 +1,7 @@
 package com.vehbiozcan.hello_turksat.config;
 
+import com.vehbiozcan.hello_turksat.entity.RootEntity;
+import com.vehbiozcan.hello_turksat.exception.ApiError;
 import com.vehbiozcan.hello_turksat.schema.ApiResponseSchema;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.models.Components;
@@ -10,6 +12,8 @@ import io.swagger.v3.oas.models.media.Content;
 import io.swagger.v3.oas.models.media.MediaType;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.responses.ApiResponse;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -31,11 +35,15 @@ public class OpenAPIConfig {
                                                                404,"Not Found","/gorev1/merhaba")))
     );
 
-    ApiResponse internalServerError = new ApiResponse().description("Internal Server Error").content(
+    /*ApiResponse internalServerError = new ApiResponse().description("Internal Server Error").content(
             new Content().addMediaType("application/json",
                                                new MediaType().schema(
                                                        ApiResponseSchema.getCustomResponseSchema("YYYY-MM-DDTHH:mm:ss.SSSZ",
                                                                500,"Internal Server Error","/gorev1/merhaba")))
+    );*/
+    ApiResponse internalServerError = new ApiResponse().description("Internal Server Error").content(
+            new Content().addMediaType("application/json",
+                                               new MediaType().schema(new Schema<RootEntity<ApiError>>()))
     );
 
 
@@ -50,12 +58,26 @@ public class OpenAPIConfig {
         components.addResponses("internalServerError",internalServerError);
 
         //Componentimizi de konfigurasyonumuza dahil ediyoruz
-        return new OpenAPI().components(components).info(
-                new Info()
-                        .title("Görev 1: Merhaba TÜRKSAT!")
-                        .version("0.0.1-SNAPSHOT")
-                        .description("Türksat Aday Mühendislik Görevi 1")
-        );
+//        return new OpenAPI().components(components).info(
+//                new Info()
+//                        .title("Görev 1: Merhaba TÜRKSAT!")
+//                        .version("0.0.1-SNAPSHOT")
+//                        .description("Türksat Aday Mühendislik Görevi 1")
+//        );
+
+        return new OpenAPI().components(components)
+                .info(new Info()
+                        .title("Hello Türksat Rest API")
+                        .version("1.0.0")
+                        .description("Hello Türksat Rest API")
+                ).addSecurityItem(new SecurityRequirement().addList("bearerAuth"))
+                .components(new Components().addSecuritySchemes("bearerAuth",
+                        new SecurityScheme()
+                                .type(SecurityScheme.Type.HTTP)
+                                .scheme("bearer")
+                                .bearerFormat("JWT")
+                                .description("Access Token değerini giriniz.")));
+
     }
 
 }

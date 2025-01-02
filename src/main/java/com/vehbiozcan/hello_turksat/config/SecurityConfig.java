@@ -28,17 +28,17 @@ public class SecurityConfig {
                 .httpBasic(); // Base64 HTTP Basic Authentication ekliyoruz
     }*/
 
-    public static final String AUTHENTICATE = "/authenticate";
-    public static final String REGISTER = "/register";
-    public static final String REFRESH_TOKEN = "/refresh-token";
+    public static final String AUTHENTICATE = "/api/auth/authenticate";
+    public static final String REGISTER = "/api/auth/register";
+    public static final String REFRESH_TOKEN = "/api/auth/refresh-token";
     public static final String[] SWAGGER_WHITELIST = {
             "/swagger-ui.html",
             "/v3/api-docs/**",
             "/swagger-ui/**",
             "/webjars/**"
     };
-    public static final String ADMIN = "/admin/**";
-    public static final String USER = "/user/**";
+    public static final String ADMIN = "/api/admin/**";
+    public static final String USER = "/api/user/**";
 
     @Autowired
     private AuthenticationProvider authenticationProvider;
