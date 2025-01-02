@@ -13,6 +13,10 @@ public class ErrorMessage {
     private MessageType messageType;
     private String extraInfo;
 
+    public ErrorMessage(MessageType messageType) {
+        this.messageType = messageType;
+    }
+
     public String prepareErrorMessage(){
 
         StringBuilder messageBuilder = new StringBuilder();

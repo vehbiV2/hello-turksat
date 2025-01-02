@@ -17,21 +17,25 @@ public enum MessageType {
     JWT_EXPIRED("1001", "JWT Süresi Dolmuş", "JWT token süresi dolmuş. Lütfen token'ınızı yenileyin.", HttpStatus.UNAUTHORIZED),
     INVALID_JWT("1002", "Geçersiz JWT", "Sağlanan JWT token geçersiz, lütfen yeniden giriş yapın.", HttpStatus.UNAUTHORIZED),
     MISSING_JWT("1003", "Eksik JWT", "JWT token eksik veya hatalı. Lütfen giriş yapın ve token'ı sağlayın.", HttpStatus.UNAUTHORIZED),
+    JWT_NULL_OR_WRONG_FORMAT("1004", "Boş veya yanlış formatta JWT", "JWT token null veya yanlış formatta (gerekli format:Bearer ). Lütfen geçerli bir token sağlayın.", HttpStatus.UNAUTHORIZED),
+
 
     // Validation Hataları
-    VALIDATION_ERROR("2001", "Doğrulama Hatası", "Bir doğrulama hatası oluştu. Lütfen girişinizi kontrol edin.", HttpStatus.BAD_REQUEST),
+    VALIDATION_ERROR("2001", "Doğrulama Hatası", "Bir doğrulama hatası oluştu. Lütfen giriş bilgilerinizi kontrol edin.", HttpStatus.BAD_REQUEST),
     FIELD_REQUIRED("2004", "Alan Zorunlu", "Bu alan boş bırakılamaz, lütfen tüm gerekli bilgileri doldurun.", HttpStatus.BAD_REQUEST),
     PASSWORD_TOO_SHORT("2005", "Şifre Çok Kısa", "Şifre en az 6 karakter olmalıdır.", HttpStatus.BAD_REQUEST),
     PASSWORD_MISMATCH("2006", "Şifre Uyuşmazlığı", "Girilen şifreler eşleşmiyor. Lütfen aynı şifreyi girin.", HttpStatus.BAD_REQUEST),
+    PASSWORD_WRONG("2007", "Şifre Yanlış", "Girilen şifre kullanıcıya ait değil. Lütfen doğru şifreyi girin.", HttpStatus.BAD_REQUEST),
 
     // Kullanıcıya Ait Hatalar
     USER_NOT_FOUND("3001", "Kullanıcı Bulunamadı", "İstenilen kullanıcı bulunamadı. Lütfen kullanıcı adını kontrol edin.", HttpStatus.NOT_FOUND),
-    USER_ALREADY_EXISTS("3002", "Kullanıcı Zaten Var", "Bu e-posta ile zaten bir kullanıcı mevcut. Lütfen farklı bir e-posta girin.", HttpStatus.CONFLICT),
+    USER_ALREADY_EXISTS("3002", "Kullanıcı Zaten Var", "Bu username ile zaten bir kullanıcı mevcut. Lütfen farklı bir username girin.", HttpStatus.CONFLICT),
 
     // Refresh Token İlgili Hatalar
     REFRESH_TOKEN_INVALID("4001", "Geçersiz Refresh Token", "Sağlanan refresh token geçersiz, lütfen yeniden giriş yapın.", HttpStatus.UNAUTHORIZED),
     REFRESH_TOKEN_EXPIRED("4002", "Süresi Dolmuş Refresh Token", "Refresh token süresi dolmuş. Lütfen yeni bir token almak için giriş yapın.", HttpStatus.UNAUTHORIZED),
     REFRESH_TOKEN_NOT_FOUND("4003", "Refresh Token Bulunamadı", "Sağlanan refresh token veritabanında bulunamadı.", HttpStatus.UNAUTHORIZED),
+    REFRESH_TOKEN_NULL("4004", "Refresh Token Değeri Boş", "Refresh token null veya boş, lütfen geçerli bir token gönderin.", HttpStatus.BAD_REQUEST),
 
     // Rol İlgili Hatalar
     INSUFFICIENT_ROLE("5001", "Yetersiz Rol", "Bu kaynağa erişmek için yeterli yetkiniz yok. Lütfen yönetici ile iletişime geçin.", HttpStatus.FORBIDDEN);

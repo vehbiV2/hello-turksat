@@ -1,6 +1,9 @@
 package com.vehbiozcan.hello_turksat.config;
 
 import com.vehbiozcan.hello_turksat.entity.User;
+import com.vehbiozcan.hello_turksat.exception.BaseException;
+import com.vehbiozcan.hello_turksat.exception.ErrorMessage;
+import com.vehbiozcan.hello_turksat.exception.MessageType;
 import com.vehbiozcan.hello_turksat.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -30,7 +33,7 @@ public class AppConfig {
             public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
                 Optional<User> optionalUser = userRepository.findByUsername(username);
                 if (!optionalUser.isPresent()) {
-                    throw new UsernameNotFoundException(username + " kullanıcısı bulunamadı");
+                    throw new BaseException(new ErrorMessage(MessageType.USER_NOT_FOUND," " +  username));
                 }
                 return optionalUser.get();
             }

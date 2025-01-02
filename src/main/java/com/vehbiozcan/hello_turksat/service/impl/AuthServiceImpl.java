@@ -4,6 +4,9 @@ import com.vehbiozcan.hello_turksat.dto.DtoUser;
 import com.vehbiozcan.hello_turksat.entity.RefreshToken;
 import com.vehbiozcan.hello_turksat.entity.Role;
 import com.vehbiozcan.hello_turksat.entity.User;
+import com.vehbiozcan.hello_turksat.exception.BaseException;
+import com.vehbiozcan.hello_turksat.exception.ErrorMessage;
+import com.vehbiozcan.hello_turksat.exception.MessageType;
 import com.vehbiozcan.hello_turksat.jwt.IJwtService;
 import com.vehbiozcan.hello_turksat.jwt.IRefreshTokenService;
 import com.vehbiozcan.hello_turksat.jwt.dto.AuthRequest;
@@ -15,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -43,7 +48,9 @@ public class AuthServiceImpl implements IAuthService {
     public DtoUser register(AuthRequest authRequest) {
         DtoUser dtoUser = new DtoUser();
         User user = new User();
-
+        if(userRepository.findByUsername(authRequest.getUsername()).isPresent()) {
+            throw new BaseException(new ErrorMessage(MessageType.USER_ALREADY_EXISTS));
+        }
         user.setUsername(authRequest.getUsername());
         user.setPassword(bCryptPasswordEncoder.encode(authRequest.getPassword()));
         user.setRole(Role.USER);
@@ -62,6 +69,7 @@ public class AuthServiceImpl implements IAuthService {
            UsernamePasswordAuthenticationToken authentication =
                    new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword());
 
+           /// Bu kısım zaten kullanıcı yoksa loadByUsername kısmında ovverride ettiğimiz yerden hatayı fırlatır
            authenticationProvider.authenticate(authentication);
 
            Optional<User> optionalUser = userRepository.findByUsername(authRequest.getUsername());
@@ -74,24 +82,36 @@ public class AuthServiceImpl implements IAuthService {
 
            return new AuthResponse(accessToken,dbRefreshToken.getRefreshToken());
 
-       } catch (Exception e) {
-           System.out.println(e.getMessage() + "Kullanıcı adı veya şifre hatalı");
+       } catch (InternalAuthenticationServiceException e) {
+           throw new BaseException(new ErrorMessage(MessageType.VALIDATION_ERROR,": [ " + e.getMessage() + " ]"));
+       } catch (BaseException e) {
+           throw new BaseException(new ErrorMessage(e.getMessageType()));
+       }catch (BadCredentialsException e){
+           throw new BaseException(new ErrorMessage(MessageType.PASSWORD_WRONG));
        }
-        return null;
+       catch (Exception e) {
+           System.out.println(e.getClass());
+           throw new BaseException(new ErrorMessage(MessageType.INTERNAL_SERVER_ERROR));
+       }
     }
 
     @Override
     public AuthResponse refreshToken(RefreshTokenRequest refreshTokenRequest) {
+
+        if(refreshTokenRequest.getRefreshToken() == null || refreshTokenRequest.getRefreshToken().isEmpty()) {
+            throw new BaseException(new ErrorMessage(MessageType.REFRESH_TOKEN_NULL));
+        }
+
         RefreshToken refreshToken = refreshTokenService.findByRefreshToken(refreshTokenRequest.getRefreshToken());
 
         if (refreshToken == null) {
-            System.out.println("REFRESH TOKEN IS NULL" + refreshTokenRequest.getRefreshToken());
-            return null;
+            //System.out.println("REFRESH TOKEN IS NULL" + refreshTokenRequest.getRefreshToken());
+            throw new BaseException(new ErrorMessage(MessageType.REFRESH_TOKEN_NOT_FOUND));
         }
 
         if (refreshTokenService.isExpireRefreshToken(refreshToken)) {
-            System.out.println("REFRESH TOKEN IS EXPIRED" + refreshToken.getRefreshToken());
-            return null;
+            //System.out.println("REFRESH TOKEN IS EXPIRED" + refreshToken.getRefreshToken());
+            throw new BaseException(new ErrorMessage(MessageType.REFRESH_TOKEN_EXPIRED));
         }
 
         String accessToken = jwtService.generateToken(refreshToken.getUser());

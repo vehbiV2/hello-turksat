@@ -5,16 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class RootEntity<T> {
 
     private boolean success;
     private HttpStatus status;
     private int statusCode;
     private T data;
+
 
     public static <T> RootEntity<T> ok(T data) {
 
@@ -28,7 +31,7 @@ public class RootEntity<T> {
         return result;
     }
 
-    public static <T> RootEntity<T> ok(T data, HttpStatus status) {
+    public static <T> ResponseEntity<RootEntity<T>> ok(T data, HttpStatus status) {
 
         RootEntity<T>  result = new RootEntity<T>();
 
@@ -43,7 +46,7 @@ public class RootEntity<T> {
         }
         result.setData(data);
 
-        return result;
+        return ResponseEntity.status(status).body(result);
     }
 
     public static <T> RootEntity<T> error(T error, HttpStatus status) {
