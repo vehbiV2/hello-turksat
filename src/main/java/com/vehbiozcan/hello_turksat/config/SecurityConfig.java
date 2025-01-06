@@ -19,14 +19,23 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
     // extends WebSecurityConfigurerAdapter {
-    /*@Override
+    /*
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
                 .antMatchers("/gorev1/**").authenticated() // /gorev1 rotasına sadece doğrulama yapmış kullanıcılar erişebilir
                 .anyRequest().permitAll() // belirlediğimiz rota dışındakiler için doğrulama istemez
                 .and()
+                .formLogin()
+                .failureHandler((request, response, exception) -> {
+                    response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                    response.getWriter().write("KULLANICI ADI VEYA SIFRE HATALI");
+                    response.getWriter().flush();
+                })
+                .and()
                 .httpBasic(); // Base64 HTTP Basic Authentication ekliyoruz
-    }*/
+    }
+    */
 
     public static final String AUTHENTICATE = "/api/auth/authenticate";
     public static final String REGISTER = "/api/auth/register";
