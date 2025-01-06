@@ -6,6 +6,13 @@ Projenin OpenAPI Swagger Dökümanı: http://localhost:8080/swagger-ui/index.htm
 
 <hr/>
 
+## İçindekiler
+
+- ### [Görev 1](#görev-1--hello-türksat-)
+- ### [Görev 2](#görev-2--basic-authentication)
+- ### [Görev 3](#görev-3--jwt-ile-role-tabanlı-authentication)
+
+
 # Görev 1 : Hello Türksat 
 
 <details>
@@ -22,6 +29,18 @@ Projenin OpenAPI Swagger Dökümanı: http://localhost:8080/swagger-ui/index.htm
 - [x] Swagger kullanılarak yazdığınız Rest API nin görselleştirmesi yapılacak. (Swagger'da görüntülenen HTTP Durum kodları farklı senaryolar ile deneyerek Postman'dan gelen veriye göre oluşturuldu
 
 <br/><hr/>
+
+## İçindekiler
+
+- [Dökümantasyon](#dökümantasyon)
+  - [Rest Api Nedir?](#rest-api-nedir)
+  - [Spring Boot](#spring-boot)
+  - [Kod Açıklamaları](#kod-açıklamaları)
+  - [Uygulama Resimleri](#uygulama-görüntüleri)
+      - [Konsol Resimleri](#konsol-görüntüsü)
+      - [Postman Resimleri](#postman-görüntüleri)
+      - [Swagger Resimleri](#swagger-görüntüleri)
+  
 
 ## Dökümantasyon
 
@@ -216,6 +235,13 @@ Bu sınıf, özel bir API yanıtı şeması oluşturmak için kullanılır. Swag
 
 ---
 
+- [Dökümantasyon](#dökümantasyon-1)
+    - [Spring Security Nedir?](#spring-security-nedir-ne-işe-yarar-)
+    - [Kod Açıklamaları](#kod-açıklamaları-1)
+    - [Uygulama Resimleri](#uygulama-görüntüleri-1)
+        - [Konsol Resimleri](#konsol-görüntüsü-1)
+        - [Postman Resimleri](#postman-görüntüleri-1)
+
 ## Dökümantasyon
 
 ### Spring Security Nedir Ne İşe Yarar ?
@@ -355,6 +381,25 @@ public class UserConfig {
 - [x] Örnek kayıtlar eklenmeli.
 
 ---
+
+- [Dökümantasyon](#dökümantasyon-2)
+    - [JWT (JSON Web Token) Nedir ve Yapısı Nasıldır ?](#jwt-json-web-token-nedir-ve-yapısı-nasıldır-)
+    - [JWT (JSON Web Token) Nasıl Çalışır ?](#jwt-json-web-token-nasıl-çalışır-)
+    - [Access Token ve Refresh Token Nedir?](#access-token-ve-refresh-token-nedir)
+    - [Kod Açıklamaları](#kod-açıklamaları-2)
+      - [Entity Package](#entity-package)
+      - [Repository Package](#repository-package)
+      - [Jwt Package](#jwt-package)
+      - [Service Package](#service-package)
+      - [Config Package](#config-package)
+      - [Exception Package](#exception-package)
+      - [Handler Package](#handler-package)
+      - [Dto Package](#dto-package)
+      - [Controller Package](#controller-package)
+    - [Uygulama Resimleri](#uygulama-görüntüleri-2)
+      - [Konsol Resimleri](#konsol-görüntüsü-2)
+      - [Postman Resimleri](#postman-görüntüleri-2)
+      - [Swagger Resimleri](#swagger-görüntüleri-1)
 
 ## Dökümantasyon
 
@@ -789,7 +834,7 @@ Bu sınıf, uygulamada kullanıcıların oturum açma, kaydolma ve token yenilem
  Spring Security yapılandırmasını içeren ve uygulamanın güvenlik politikalarını belirleyen bir konfigürasyon sınıfıdır. REST API üzerinde kullanıcı kimlik doğrulama ve yetkilendirme işlemleri için gerekli olan filtreler, izinler ve kurallar bu sınıf aracılığıyla tanımlanır.
 
 
-#### **Alanlar ve Sabitler:**
+#### Alanlar ve Sabitler:
 - **`AUTHENTICATE`, `REGISTER`, `REFRESH_TOKEN`:**  
   Kimlik doğrulama ve kullanıcı kaydı için açık olan uç noktaları temsil eder.
 - **`SWAGGER_WHITELIST`:**  
@@ -798,12 +843,12 @@ Bu sınıf, uygulamada kullanıcıların oturum açma, kaydolma ve token yenilem
   Yöneticiler ve kullanıcılar için özelleştirilmiş uç noktaları temsil eder.
 
 
-#### **Bağımlılıklar:**
+#### Bağımlılıklar:
 - **`AuthenticationProvider`:** Kimlik doğrulama işlemlerini destekler.
 - **`JwtAuthenticationFilter`:** JWT tabanlı kimlik doğrulama filtresi.
 - **`AuthEntryPoint`:** Yetkilendirme hataları durumunda özelleştirilmiş yanıtlar döndürür.
 
-#### **Metot:**
+#### Metot:
 
 #### **`securityFilterChain(HttpSecurity http)`**
 - **Amaç:** Güvenlik yapılandırmasını tanımlar ve `SecurityFilterChain` nesnesi döner.
@@ -821,7 +866,7 @@ Bu sınıf, uygulamada kullanıcıların oturum açma, kaydolma ve token yenilem
     4. **Filtre Zinciri:** Tanımlanan yapılandırma döndürülür.
 
     
-#### **Kullanım Amacı:**
+#### Kullanım Amacı:
 Bu sınıf, Spring Security kullanarak uygulamada oturum yönetimini ve kaynak bazlı erişim kontrolünü sağlar. JWT tabanlı kimlik doğrulama mekanizmasını destekler ve REST API'yi güvenli hale getirir. Özellikle stateless yapı (JWT) ile çalışırken, kullanıcıların güvenli bir şekilde doğrulanmasını ve yetkilendirilmesini sağlar.
 
 ---
