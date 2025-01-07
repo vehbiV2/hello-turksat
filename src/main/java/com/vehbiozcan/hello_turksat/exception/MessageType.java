@@ -18,6 +18,8 @@ public enum MessageType {
     INVALID_JWT("1002", "Geçersiz JWT", "Sağlanan JWT token geçersiz, lütfen yeniden giriş yapın.", HttpStatus.UNAUTHORIZED),
     MISSING_JWT("1003", "Eksik JWT", "JWT token eksik veya hatalı. Lütfen giriş yapın ve token'ı sağlayın.", HttpStatus.UNAUTHORIZED),
     JWT_NULL_OR_WRONG_FORMAT("1004", "Boş veya yanlış formatta JWT", "JWT token null veya yanlış formatta (gerekli format:Bearer ). Lütfen geçerli bir token sağlayın.", HttpStatus.UNAUTHORIZED),
+    JWT_NOT_REFRESH("1005", "JWT Yenilenemedi", "JWT token yenilenemedi.", HttpStatus.UNAUTHORIZED),
+    DEACTIVE_JWT("1006", "Kullanım Dışı JWT", "Sağlanan JWT token kullanım dışı", HttpStatus.UNAUTHORIZED),
 
 
     // Validation Hataları

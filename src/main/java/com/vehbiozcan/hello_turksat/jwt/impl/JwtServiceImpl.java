@@ -1,10 +1,14 @@
 package com.vehbiozcan.hello_turksat.jwt.impl;
 
+import com.vehbiozcan.hello_turksat.entity.AccessToken;
+import com.vehbiozcan.hello_turksat.entity.RefreshToken;
 import com.vehbiozcan.hello_turksat.jwt.IJwtService;
+import com.vehbiozcan.hello_turksat.repository.AccessTokenRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
@@ -13,6 +17,7 @@ import java.security.Key;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 import java.util.function.Function;
 
 @Component
@@ -22,6 +27,9 @@ public class JwtServiceImpl implements IJwtService {
 
     @Value("${jwt.expirationTime}")
     private Long expirationTime;
+
+    @Autowired
+    private AccessTokenRepository  accessTokenRepository;
 
     @Override
     public String generateToken(UserDetails userDetails) {
@@ -36,6 +44,28 @@ public class JwtServiceImpl implements IJwtService {
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(getKey())
                 .compact();
+    }
+
+    @Override
+    public AccessToken saveAccessToken(AccessToken accessToken) {
+        return accessTokenRepository.save(accessToken);
+    }
+
+
+    public AccessToken findByAccessToken(String accessToken) {
+
+        if (accessToken == null) return null;
+
+        Optional<AccessToken> optionalAccessToken = accessTokenRepository.findByAccessToken(accessToken);
+
+        if (optionalAccessToken.isPresent()) return optionalAccessToken.get();
+
+        return null;
+    }
+
+    @Override
+    public void allTokenPassiveFromUserId(Long userId) {
+        accessTokenRepository.updateAccessToken(userId);
     }
 
     @Override

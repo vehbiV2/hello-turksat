@@ -1,5 +1,6 @@
 package com.vehbiozcan.hello_turksat.jwt;
 
+import com.vehbiozcan.hello_turksat.entity.AccessToken;
 import io.jsonwebtoken.ExpiredJwtException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,19 +38,24 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         try{
             if (token != null) {
-                username = jwtService.getUsernameByToken(token);
+                AccessToken accessToken = jwtService.findByAccessToken(token);
+                if(accessToken != null) {
+                   if(accessToken.isActive()){
+                       username = jwtService.getUsernameByToken(token);
 
-                if(StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
-                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                       if(StringUtils.isNotEmpty(username) && SecurityContextHolder.getContext().getAuthentication() == null) {
+                           UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-                    if(userDetails != null && jwtService.isTokenValid(token, userDetails.getUsername())) {
-                        UsernamePasswordAuthenticationToken authentication =
-                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                           if(userDetails != null && jwtService.isTokenValid(token, userDetails.getUsername())) {
+                               UsernamePasswordAuthenticationToken authentication =
+                                       new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
 
-                        authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                               authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                        SecurityContextHolder.getContext().setAuthentication(authentication);
-                    }
+                               SecurityContextHolder.getContext().setAuthentication(authentication);
+                           }
+                       }
+                   }
                 }
             }
         }catch (ExpiredJwtException e){

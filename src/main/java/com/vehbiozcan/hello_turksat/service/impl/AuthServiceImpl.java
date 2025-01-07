@@ -1,6 +1,7 @@
 package com.vehbiozcan.hello_turksat.service.impl;
 
 import com.vehbiozcan.hello_turksat.dto.DtoUser;
+import com.vehbiozcan.hello_turksat.entity.AccessToken;
 import com.vehbiozcan.hello_turksat.entity.RefreshToken;
 import com.vehbiozcan.hello_turksat.entity.Role;
 import com.vehbiozcan.hello_turksat.entity.User;
@@ -75,7 +76,13 @@ public class AuthServiceImpl implements IAuthService {
            Optional<User> optionalUser = userRepository.findByUsername(authRequest.getUsername());
            User user = optionalUser.get();
 
-           String accessToken = jwtService.generateToken(user);
+           jwtService.allTokenPassiveFromUserId(user.getId());
+           /// AccessToken Dbye kayıt ediliyor
+           AccessToken accessTokenObj = new AccessToken();
+           accessTokenObj.setAccessToken(jwtService.generateToken(user));
+           accessTokenObj.setUser(user);
+           /// Kayıt edilen AccessTokenden token değeri alınıyor
+           String accessToken = jwtService.saveAccessToken(accessTokenObj).getAccessToken();
 
            RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
            RefreshToken dbRefreshToken = refreshTokenService.saveRefreshToken(refreshToken);
@@ -114,12 +121,38 @@ public class AuthServiceImpl implements IAuthService {
             throw new BaseException(new ErrorMessage(MessageType.REFRESH_TOKEN_EXPIRED));
         }
 
-        String accessToken = jwtService.generateToken(refreshToken.getUser());
+        /// Gönderilen AccessToken gerçekten var mı kontrolü sağlanıyor.
+        AccessToken oldAccessToken = jwtService.findByAccessToken(refreshTokenRequest.getAccessToken());
+
+        if (oldAccessToken == null) {
+            throw new BaseException(new ErrorMessage(MessageType.MISSING_JWT));
+        }
+
+        if (!oldAccessToken.isActive()) {
+            throw new BaseException(new ErrorMessage(MessageType.DEACTIVE_JWT));
+        }
+        /// Bulunan token pasife çekiliyor
+//      oldAccessToken.setActive(false);
+        System.out.println("USER ID : " + oldAccessToken.getUser().getId().getClass());
+        jwtService.allTokenPassiveFromUserId(oldAccessToken.getUser().getId());
+        AccessToken oldDbAccessToken = jwtService.saveAccessToken(oldAccessToken);
+
+        if(oldDbAccessToken == null) {
+            throw new BaseException(new ErrorMessage(MessageType.JWT_NOT_REFRESH));
+        }
+
+        AccessToken accessToken = new AccessToken();
+        String token = jwtService.generateToken(refreshToken.getUser());
+
+        accessToken.setAccessToken(token);
+        accessToken.setUser(refreshToken.getUser());
+
+        jwtService.saveAccessToken(accessToken);
         RefreshToken dbRefreshToken = refreshTokenService.saveRefreshToken(
                 refreshTokenService.createRefreshToken(refreshToken.getUser())
         );
-
-        return new AuthResponse(accessToken,dbRefreshToken.getRefreshToken());
+        System.out.println("BURALARA GELDi 3");
+        return new AuthResponse(token,dbRefreshToken.getRefreshToken());
     }
 
 }

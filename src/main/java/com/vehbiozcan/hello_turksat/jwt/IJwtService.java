@@ -1,5 +1,6 @@
 package com.vehbiozcan.hello_turksat.jwt;
 
+import com.vehbiozcan.hello_turksat.entity.AccessToken;
 import io.jsonwebtoken.Claims;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -8,6 +9,9 @@ import java.util.function.Function;
 
 public interface IJwtService {
     public String generateToken(UserDetails userDetails);
+    public AccessToken saveAccessToken(AccessToken accessToken);
+    public AccessToken findByAccessToken(String accessToken);
+    public void allTokenPassiveFromUserId(Long userId);
     public Claims getClaimsFromToken(String token);
     public <T> T exportToken(String token, Function<Claims, T> claimsResolver);
     public String getUsernameByToken(String token);
