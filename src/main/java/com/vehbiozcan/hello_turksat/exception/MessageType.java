@@ -40,7 +40,20 @@ public enum MessageType {
     REFRESH_TOKEN_NULL("4004", "Refresh Token Değeri Boş", "Refresh token null veya boş, lütfen geçerli bir token gönderin.", HttpStatus.BAD_REQUEST),
 
     // Rol İlgili Hatalar
-    INSUFFICIENT_ROLE("5001", "Yetersiz Rol", "Bu kaynağa erişmek için yeterli yetkiniz yok. Lütfen yönetici ile iletişime geçin.", HttpStatus.FORBIDDEN);
+    INSUFFICIENT_ROLE("5001", "Yetersiz Rol", "Bu kaynağa erişmek için yeterli yetkiniz yok. Lütfen yönetici ile iletişime geçin.", HttpStatus.FORBIDDEN),
+
+    // File İşlemleri İle İlgili Hatalar
+    FILE_NOT_FOUND("5001", "Dosya Bulunamadı", "İstenilen dosya bulunamadı. Lütfen dosya yolunu kontrol edin.", HttpStatus.NOT_FOUND),
+    FILE_UPLOAD_FAILED("5002", "Dosya Yükleme Başarısız", "Dosya yükleme işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.", HttpStatus.INTERNAL_SERVER_ERROR),
+    FILE_SIZE_EXCEEDED("5003", "Dosya Boyutu Aşıldı", "Yüklenen dosya izin verilen maksimum boyutu aşıyor. Lütfen daha küçük bir dosya yükleyin.", HttpStatus.BAD_REQUEST),
+    FILE_TYPE_NOT_SUPPORTED("5004", "Desteklenmeyen Dosya Türü", "Yüklenen dosya türü desteklenmiyor. Lütfen geçerli bir dosya türü seçin.", HttpStatus.UNSUPPORTED_MEDIA_TYPE),
+    FILE_NAME_TOO_LONG("5005", "Dosya Adı Çok Uzun", "Dosya adı izin verilen maksimum uzunluğu aşıyor. Lütfen daha kısa bir dosya adı kullanın.", HttpStatus.BAD_REQUEST),
+    FILE_STORAGE_FAILED("5006", "Dosya Depolama Başarısız", "Dosya depolama işlemi sırasında bir hata oluştu. Lütfen tekrar deneyin.", HttpStatus.INTERNAL_SERVER_ERROR),
+    FILE_ALREADY_EXISTS("5007", "Dosya Zaten Var", "Aynı isimde bir dosya zaten mevcut. Lütfen farklı bir dosya adı seçin.", HttpStatus.CONFLICT),
+    INVALID_FILE_PATH("5008", "Geçersiz Dosya Yolu", "Sağlanan dosya yolu geçersiz veya erişilemez. Lütfen geçerli bir yol sağlayın.", HttpStatus.BAD_REQUEST),
+    FILE_EMPTY("5009", "Boş Dosya", "Yüklenen dosya boş. Lütfen geçerli bir dosya yükleyin.", HttpStatus.BAD_REQUEST),
+    MULTIPART_RESOLUTION_FAILED("5010", "Dosya Çözümleme Hatası", "Multipart dosya çözümleme işlemi başarısız oldu. Lütfen dosyayı kontrol edin.", HttpStatus.BAD_REQUEST);
+
 
     private final String code;
     private final String title;

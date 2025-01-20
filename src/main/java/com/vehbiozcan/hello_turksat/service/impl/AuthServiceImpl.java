@@ -77,6 +77,7 @@ public class AuthServiceImpl implements IAuthService {
            User user = optionalUser.get();
 
            jwtService.allTokenPassiveFromUserId(user.getId());
+
            /// AccessToken Dbye kayıt ediliyor
            AccessToken accessTokenObj = new AccessToken();
            accessTokenObj.setAccessToken(jwtService.generateToken(user));
