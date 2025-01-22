@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -84,4 +85,115 @@ public class FileUploadServiceImpl implements IFileUploadService {
 
         return savedDtoFile;
     }
+
+
+
+/*
+
+    @Override
+    public DtoUploadedFile uploadFileBytes(byte[] fileBytes, String originalFileName, String contentType) {
+
+        if (fileBytes == null || fileBytes.length == 0) {
+            throw new BaseException(new ErrorMessage(MessageType.FILE_EMPTY));
+        }
+
+        if (!isPdf(fileBytes)) {
+            throw new BaseException(new ErrorMessage(MessageType.FILE_TYPE_NOT_SUPPORTED));
+        }
+
+        // Yeni dosya adını oluşturuyoruz
+        String uploadedFileName = JwtUtils.getUserNameFromSecurityContextHolder() + "_" + UUID.randomUUID().toString() + "_" + originalFileName +".pdf";
+
+        // Directory yi oluşturuyoruz
+        File dir = new File(uploadDir);
+
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String filePath = uploadDir + uploadedFileName;
+
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(fileBytes);  // Byte array'i dosyaya yazıyoruz
+        } catch (IOException e) {
+            throw new RuntimeException("File saving error", e);
+        }
+
+        // Dosya bilgilerini kaydediyoruz
+        UploadedFile uploadedFile = new UploadedFile();
+        uploadedFile.setFileName(uploadedFileName);
+        uploadedFile.setFileType(contentType);
+        uploadedFile.setFilePath(filePath);
+        uploadedFile.setFileSize((long) fileBytes.length);
+
+        UploadedFile savedFile = uploadedFileRepository.save(uploadedFile);
+
+        return DtoUploadedFile.builder()
+                .id(savedFile.getId())
+                .fileName(savedFile.getFileName())
+                .fileType(savedFile.getFileType())
+                .filePath(savedFile.getFilePath())
+                .fileSize(savedFile.getFileSize())
+                .fileSizeKb((savedFile.getFileSize() / 1024.0))
+                .uploadDate(savedFile.getUploadDate())
+                .build();
+    }
+*/
+
+
+    @Override
+    public DtoUploadedFile uploadFileBytes(byte[] fileBytes) {
+
+        if (fileBytes == null || fileBytes.length == 0) {
+            throw new BaseException(new ErrorMessage(MessageType.FILE_EMPTY));
+        }
+
+        if (!isPdf(fileBytes)) {
+            throw new BaseException(new ErrorMessage(MessageType.FILE_TYPE_NOT_SUPPORTED));
+        }
+
+        // Yeni dosya adını oluşturuyoruz
+        String uploadedFileName = JwtUtils.getUserNameFromSecurityContextHolder() + "_" + UUID.randomUUID().toString() + "_byteFiles" + ".pdf";
+
+        // Directory yi oluşturuyoruz
+        File dir = new File(uploadDir);
+
+        if (!dir.exists()) {
+            dir.mkdirs();
+        }
+
+        String filePath = uploadDir + uploadedFileName;
+
+        try (FileOutputStream fos = new FileOutputStream(filePath)) {
+            fos.write(fileBytes);  // Byte array'i dosyaya yazıyoruz
+        } catch (IOException e) {
+            throw new BaseException(new ErrorMessage(MessageType.FILE_UPLOAD_FAILED));
+        }
+
+        // Dosya bilgilerini kaydediyoruz
+        UploadedFile uploadedFile = new UploadedFile();
+        uploadedFile.setFileName(uploadedFileName);
+        uploadedFile.setFileType("application/pdf");
+        uploadedFile.setFilePath(filePath);
+        uploadedFile.setFileSize((long) fileBytes.length);
+
+        UploadedFile savedFile = uploadedFileRepository.save(uploadedFile);
+
+        return DtoUploadedFile.builder()
+                .id(savedFile.getId())
+                .fileName(savedFile.getFileName())
+                .fileType(savedFile.getFileType())
+                .filePath(savedFile.getFilePath())
+                .fileSize(savedFile.getFileSize())
+                .fileSizeKb((savedFile.getFileSize() / 1024.0))
+                .uploadDate(savedFile.getUploadDate())
+                .build();
+    }
+
+    private boolean isPdf(byte[] fileBytes) {
+        // PDF dosyalarının başında %PDF ile başlar
+        return (fileBytes[0] == 0x25 && fileBytes[1] == 0x50 && fileBytes[2] == 0x44 && fileBytes[3] == 0x46);
+    }
+
+
 }
