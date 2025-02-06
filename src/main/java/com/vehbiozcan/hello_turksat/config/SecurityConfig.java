@@ -65,6 +65,7 @@ public class SecurityConfig {
                 request
                         .antMatchers(AUTHENTICATE, REGISTER, REFRESH_TOKEN).permitAll()
                         .antMatchers(SWAGGER_WHITELIST).permitAll()
+                        //.antMatchers("/api/uploads/**").permitAll()
                         .antMatchers(ADMIN).hasAuthority(Role.ADMIN.name())
                         .antMatchers(USER).hasAnyAuthority(Role.ADMIN.name(), Role.USER.name())
                         .anyRequest().authenticated())
