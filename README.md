@@ -11,6 +11,8 @@ Projenin OpenAPI Swagger Dökümanı: http://localhost:8080/swagger-ui/index.htm
 - ### [Görev 1](#görev-1--hello-türksat-)
 - ### [Görev 2](#görev-2--basic-authentication)
 - ### [Görev 3](#görev-3--jwt-ile-role-tabanlı-authentication)
+- ### [Görev 4](#görev-4--grpc-entegrasyonu)
+- ### [Görev 5](#görev-5--byte-array-ve-multipart-file-dosya-gönderim-hızları-karşılaştırması)
 
 
 # Görev 1 : Hello Türksat 
@@ -1317,3 +1319,10 @@ Bu sınıf, kullanıcılar için sistemdeki çeşitli işlemlerle ilgili API end
 ![swg6](/images/m3/swg6.PNG)
 
 </details>
+
+# Görev 4 : gRPC Entegrasyonu 
+
+## [Görev 4 Farklı Bir Repoda Gitmek İçin Bağlantıya Tıklayınız](https://github.com/vehbiV2/product-discount-gRPC-basic-microservice)
+
+# Görev 5 : Byte Array ve Multipart File Dosya Gönderim Hızları Karşılaştırması
+
